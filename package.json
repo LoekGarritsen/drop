@@ -1,0 +1,13 @@
+{
+  "name": "drop",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Self-hosted, end-to-end encrypted drop box for files, notes and secrets between your own devices.",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "PORT=8300 DATA_DIR=./data node --watch server.js",
+    "test": "node --test \"test/**/*.test.js\""
+  }
+}

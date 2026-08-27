@@ -1,0 +1,16 @@
+services:
+  drop:
+    build: .
+    image: drop:local
+    container_name: drop
+    restart: unless-stopped
+    ports:
+      - "8300:8300"
+    volumes:
+      - ./data:/data
+    environment:
+      # 4 GiB per item, 7 day default TTL, 30 day max. Override as needed.
+      MAX_ITEM_BYTES: "4294967296"
+      DEFAULT_TTL_S: "604800"
+      MAX_TTL_S: "2592000"
+    mem_limit: 256m

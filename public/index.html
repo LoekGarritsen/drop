@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111214">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="referrer" content="no-referrer">
+<title>drop</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<dialog id="unlock">
+  <form method="dialog" id="unlock-form">
+    <h1>drop</h1>
+    <p id="unlock-hint">Enter the vault passphrase. Every device uses the same one; the server never sees it.</p>
+    <input id="passphrase" type="password" autocomplete="current-password" placeholder="passphrase" required autofocus>
+    <label class="row"><input id="remember" type="checkbox" checked> Remember on this device</label>
+    <p id="unlock-error" class="error" hidden></p>
+    <button type="submit" id="unlock-btn">Unlock</button>
+  </form>
+</dialog>
+
+<header>
+  <div class="brand"><img src="/icon.svg" alt="" width="24" height="24"> drop</div>
+  <nav>
+    <button data-tab="files" class="active">Files</button>
+    <button data-tab="notes">Notes</button>
+    <button data-tab="secrets">Secrets</button>
+  </nav>
+  <button id="lock" title="Lock vault">Lock</button>
+</header>
+
+<main>
+  <section id="compose">
+    <div id="dropzone" class="tab-files">
+      <input id="file-input" type="file" multiple hidden>
+      <p>Drop files here, paste, or <button type="button" id="pick">choose files</button></p>
+      <p class="muted">Encrypted in your browser before upload.</p>
+    </div>
+
+    <form id="note-form" class="tab-notes" hidden>
+      <input id="note-title" placeholder="Title (optional)" autocomplete="off">
+      <textarea id="note-text" rows="6" placeholder="Paste or type a note" required></textarea>
+      <button type="submit">Save note</button>
+    </form>
+
+    <form id="secret-form" class="tab-secrets" hidden>
+      <input id="secret-label" placeholder="Label, e.g. wifi password" autocomplete="off">
+      <textarea id="secret-text" rows="3" placeholder="Password or secret" required autocomplete="off" spellcheck="false"></textarea>
+      <label class="row"><input id="secret-burn" type="checkbox" checked> Burn after first reveal</label>
+      <button type="submit">Save secret</button>
+    </form>
+
+    <div class="options">
+      <label>Expires
+        <select id="ttl">
+          <option value="3600">1 hour</option>
+          <option value="86400">1 day</option>
+          <option value="604800" selected>7 days</option>
+          <option value="2592000">30 days</option>
+        </select>
+      </label>
+    </div>
+    <div id="progress" hidden><div id="progress-bar"></div><span id="progress-text"></span></div>
+  </section>
+
+  <section id="list"></section>
+  <p id="empty" class="muted" hidden>Nothing here yet.</p>
+</main>
+
+<template id="item-tpl">
+  <article class="item">
+    <div class="item-main">
+      <span class="item-icon"></span>
+      <div class="item-body">
+        <div class="item-name"></div>
+        <div class="item-sub muted"></div>
+        <pre class="item-preview" hidden></pre>
+      </div>
+    </div>
+    <div class="item-actions">
+      <button class="act-open">Open</button>
+      <button class="act-copy">Copy</button>
+      <button class="act-delete danger">Delete</button>
+    </div>
+  </article>
+</template>
+
+<div id="toast" hidden></div>
+<script type="module" src="/app.js"></script>
+</body>
+</html>

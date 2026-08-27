@@ -1,0 +1,20 @@
+{
+  "name": "drop",
+  "short_name": "drop",
+  "description": "Encrypted file, note and secret sharing between your devices",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111214",
+  "theme_color": "#111214",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": { "title": "title", "text": "text", "url": "url", "files": [{ "name": "files", "accept": ["*/*"] }] }
+  }
+}
