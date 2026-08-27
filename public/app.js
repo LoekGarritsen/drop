@@ -237,6 +237,10 @@ function highlightDeepLink() {
 
 // --- wiring -------------------------------------------------------------
 async function main() {
+  if (!crypto.subtle) {
+    $("#unlock-form").innerHTML = "<h1>drop</h1><p class=error>WebCrypto unavailable: open this page over https (secure context), not plain http.</p>";
+    $("#unlock").showModal(); return;
+  }
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {});
   await loadMeta();
 
