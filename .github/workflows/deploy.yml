@@ -36,11 +36,12 @@ jobs:
         run: |
           rsync -a --delete --exclude 'data/' --exclude '.git/' src/ /docker/drop/
 
+      # Runner is a container: 127.0.0.1 is itself, so probe the host LAN IP.
       - name: Rebuild and restart container
         working-directory: /docker/drop
         run: |
           docker compose up -d --build
           for i in $(seq 1 20); do
-            curl -fsS http://127.0.0.1:8300/api/meta >/dev/null && exit 0; sleep 1
+            curl -fsS http://192.168.2.211:8300/api/meta >/dev/null && exit 0; sleep 1
           done
           echo "drop did not come up"; docker compose logs --tail 30; exit 1
