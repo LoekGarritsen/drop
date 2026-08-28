@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: End-to-end tests
+        run: |
+          PORT=8399 DATA_DIR=/tmp/drop-test node server.js &
+          for i in $(seq 1 20); do
+            wget -qO- http://127.0.0.1:8399/api/meta >/dev/null 2>&1 && break
+            sleep 0.5
+          done
+          npm test

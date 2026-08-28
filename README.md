@@ -15,6 +15,10 @@ Zero runtime dependencies: Node 24+ (`node:sqlite`), plain HTML/JS, WebCrypto in
 
 Threat model: protects the data at rest on the server and against anyone who can read the disk or database. Does **not** protect against a malicious server operator modifying the JavaScript, and there is no per-user auth: run it only on a network you trust (tailnet, LAN). Losing the passphrase loses everything.
 
+## Demo mode
+
+`DEMO=1` (or `docker compose -f compose.demo.yaml up`) runs a locked-down public instance: a "shared vault, wiped hourly" banner, small item cap, short TTL. Pair it with a reverse-proxy rate limit and a cron that clears `DATA_DIR` on a schedule.
+
 ## Run
 
 ```bash
@@ -27,7 +31,7 @@ or without Docker:
 npm run dev                      # PORT=8300 DATA_DIR=./data, restarts on change
 ```
 
-Environment: `PORT` (8300), `DATA_DIR` (`./data`), `MAX_ITEM_BYTES` (4 GiB), `DEFAULT_TTL_S` (7 days), `MAX_TTL_S` (30 days).
+Environment: `PORT` (8300), `DATA_DIR` (`./data`), `MAX_ITEM_BYTES` (4 GiB), `DEFAULT_TTL_S` (7 days), `MAX_TTL_S` (30 days), `DEMO` (`0`; `1` shows the shared-instance banner).
 
 Put a TLS-terminating reverse proxy in front (WebCrypto requires a secure context, so `https://` or `localhost`). If the proxy buffers request bodies, raise its upload limit or disable buffering for `/api/items/*/chunks/*`.
 
@@ -53,3 +57,7 @@ All bodies are opaque to the server.
 | GET | `/api/items/:id/blob` | full ciphertext, `X-Chunk-Size` header; deletes if burn |
 | DELETE | `/api/items/:id` | delete |
 | GET | `/api/events` | SSE stream of `change` events |
+
+## License
+
+MIT &mdash; see [LICENSE](LICENSE).

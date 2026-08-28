@@ -29,7 +29,10 @@ async function copyText(text) {
 }
 
 // --- vault --------------------------------------------------------------
-async function loadMeta() { state.meta = await api("/meta"); }
+async function loadMeta() {
+  state.meta = await api("/meta");
+  if (state.meta.demo) $("#demo-banner").hidden = false;
+}
 
 async function tryStoredKey() {
   const raw = localStorage.getItem("drop.key");

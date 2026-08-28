@@ -18,6 +18,8 @@ const MAX_ITEM_BYTES = Number(process.env.MAX_ITEM_BYTES || 4 * 1024 ** 3);
 const MAX_META_BYTES = 64 * 1024;
 const DEFAULT_TTL_S = Number(process.env.DEFAULT_TTL_S || 7 * 86400);
 const MAX_TTL_S = Number(process.env.MAX_TTL_S || 30 * 86400);
+// Public demo mode: the client shows a "shared instance, wiped hourly" banner.
+const DEMO = process.env.DEMO === "1" || process.env.DEMO === "true";
 
 fs.mkdirSync(BLOB_DIR, { recursive: true });
 
@@ -131,7 +133,7 @@ async function api(req, res, url) {
   if (resource === "meta" && req.method === "GET") {
     const check = db.prepare("SELECT value FROM settings WHERE key = 'vault_check'").get()?.value || "";
     return send(res, 200, { salt: VAULT_SALT, check, maxItemBytes: MAX_ITEM_BYTES,
-      defaultTtl: DEFAULT_TTL_S, maxTtl: MAX_TTL_S });
+      defaultTtl: DEFAULT_TTL_S, maxTtl: MAX_TTL_S, demo: DEMO });
   }
 
   // First device to set up the vault stores an encrypted check value so

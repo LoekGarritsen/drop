@@ -19,6 +19,10 @@ button[type=submit], #unlock-btn { background: var(--accent); color: #000; borde
 input[type=text], input[type=password], input:not([type]), textarea, select {
   width: 100%; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; }
 textarea { resize: vertical; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; }
+#demo-banner { background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-bottom: 1px solid var(--line); padding: 8px 16px; font-size: 13px; text-align: center; }
+#demo-banner a { color: var(--accent); }
+
 .muted { color: var(--muted); font-size: 13px; }
 .error { color: var(--danger); }
 .row { display: flex; align-items: center; gap: 8px; font-size: 14px; }
