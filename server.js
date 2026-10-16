@@ -204,14 +204,17 @@ async function api(req, res, url) {
   if (sub === "blob" && req.method === "GET") {
     if (!row.complete) return send(res, 409, { error: "upload not finished" });
     q.view.run(id);
+    const blob = fs.createReadStream(blobPath(id));
+    // Burn-after-read: gone once the bytes have been sent, whether or not
+    // the client manages to decrypt them. Drop the row before the first byte
+    // goes out so a second request can never race the stream and win.
+    if (row.burn) { q.del.run(id); broadcast("change", { id, op: "delete" }); }
     res.writeHead(200, { "Content-Type": "application/octet-stream", "Content-Length": row.size,
       "Cache-Control": "no-store", "X-Chunk-Size": row.chunk_size });
     try {
-      await pipeline(fs.createReadStream(blobPath(id)), res);
+      await pipeline(blob, res);
     } finally {
-      // Burn-after-read: gone once the bytes have been sent, whether or not
-      // the client manages to decrypt them.
-      if (row.burn) { removeItem(id); broadcast("change", { id, op: "delete" }); }
+      if (row.burn) fs.rm(blobPath(id), { force: true }, () => {});
     }
     return;
   }
